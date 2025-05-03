@@ -1,6 +1,6 @@
 services:
   backend:
-    build: ./Backend/odc
+    build: ./Backend
     container_name: backend_app
     ports:
       - "8000:8000"
@@ -29,7 +29,7 @@ services:
       - postgres_data:/var/lib/postgresql/data  
 
   migrate:
-    build: ./Backend/odc
+    build: ./Backend
     command: python manage.py migrate
     depends_on:
       - db
