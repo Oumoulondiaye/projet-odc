@@ -1,0 +1,15 @@
+FROM python:3.13-slim
+EXPOSE 8080
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+WORKDIR /app
+COPY ./odc/requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . /app
+RUN adduser --uid 5678 --disabled-password --gecos "" appuser && chown -R appuser /app
+USER appuser
+
+ENV DJANGO_SETTINGS_MODULE=odc.settings
+CMD ["python", "odc/manage.py", "runserver", "0.0.0.0:8080"]
