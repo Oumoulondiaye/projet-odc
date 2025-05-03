@@ -1,47 +1,39 @@
 services:
-
   backend:
-    image: geek120804/image-back:latest
-    build:
-      context: ./Backend/
-      dockerfile: dockerfile
+    build: ./Backend/odc
+    container_name: backend_app
     ports:
-      - 8080:8000
-    environment:
-      - DJANGO_SETTINGS_MODULE=odc.settings
-      - POSTGRES_HOST=database
+      - "8000:8000"
     depends_on:
-      - database
-
-  database:
-    image: postgres:latest
-    ports:
-      - 5432:5432
-    environment:
-      POSTGRES_USER: odc
-      POSTGRES_PASSWORD: odc123
-      POSTGRES_DB: odcdb
-    volumes:
-      - pgdata:/var/lib/postgresql/database
-
-  db-migrations:
-    image: backend
-    command: python manage.py migrate
-    depends_on:
-      - database
-    profiles:
-      - tools
+      - db
+    command: python manage.py runserver 0.0.0.0:8000 
 
   frontend:
-    image: geek120804/image-front:latest
-    build:
-      context: ./Frontend
-      dockerfile: dockerfile
+    build: ./Frontend
+    container_name: frontend_app
     ports:
-      - 5173:5173
+      - "8081:80"
     depends_on:
+      - db
+
+  db:
+    image: postgres
+    restart: always
+    environment:  
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: zou123
+      POSTGRES_DB: odc_db
+    ports:
+      - "5433:5432"  
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  
+
+  migrate:
+    build: ./Backend/odc
+    command: python manage.py migrate
+    depends_on:
+      - db
       - backend
 
 volumes:
-  pgdata:
-    driver: local
+  postgres_data:  
