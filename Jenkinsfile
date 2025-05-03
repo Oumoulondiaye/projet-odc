@@ -28,7 +28,7 @@ pipeline {
 
        stage('Push des images sur Docker Hub') {
     steps {
-        withDockerRegistry([credentialsId: 'dckr_pat_aI3Pesibl2enJLqYC5vqr_gMJ-Y', url: '']) {
+        withDockerRegistry([credentialsId: 'dockerhub', url: '']) {
             bat "docker push %BACKEND_IMAGE%:latest"
             bat "docker push %FRONTEND_IMAGE%:latest"
             bat "docker push %MIGRATE_IMAGE%:latest"
