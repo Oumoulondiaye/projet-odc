@@ -20,7 +20,7 @@ pipeline {
     steps {
         bat "docker build -t %BACKEND_IMAGE%:latest ./Backend"
         bat "docker build -t %FRONTEND_IMAGE%:latest ./Frontend"
-        bat "docker build -t %MIGRATE_IMAGE%:latest ./Backend/odc"
+        bat "docker build -t %MIGRATE_IMAGE%:latest ./Backend"
     }
 }
 
